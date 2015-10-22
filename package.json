@@ -1,0 +1,26 @@
+{
+  "name": "masonry",
+  "version": "0.0.1",
+  "description": "Modular Component Framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dcbartlett/masonry.git"
+  },
+  "author": "Dennis Bartlett",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dcbartlett/masonry/issues"
+  },
+  "homepage": "https://github.com/dcbartlett/masonry#readme",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-jsdoc-to-markdown": "^1.1.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-util": "^3.0.7"
+  }
+}
