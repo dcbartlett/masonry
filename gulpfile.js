@@ -75,8 +75,11 @@ gulp.task("version", function(done) {
 			.on("error", errHandler)
 			.pipe(gulp.dest("."));
 	});
-})
+});
 
+gulp.task("default", function() {
+	console.log("No Help for you");
+});
 
 function errHandler(err) {
 	console.log(err);

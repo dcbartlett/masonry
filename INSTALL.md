@@ -8,3 +8,17 @@ gulp dist
 cd dist
 npm link --production
 ```
+
+# Gulp Tasks
+
+```gulp```
+This will result in a help screen
+
+```gulp docs```
+This will build the Documentation in the _docs_ folder
+
+```gulp dist```
+This will build the masonry distribution files. These are minified and concatinated files meant to be used as a global module to run masonry-cli.
+
+```gulp version```
+This will allow you to version up the rev of Masonry when being published.
