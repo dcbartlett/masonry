@@ -24,8 +24,8 @@ build/Release
 dist
 
 # Docs
-docs
-!docs/template.hbs
+src/docs
+!src/docs/template.hbs
 
 # Dependency directory
 # https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git
