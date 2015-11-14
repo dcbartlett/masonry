@@ -5,7 +5,6 @@ var gutil = require("gulp-util");
 var gulpJsdoc2md = require("gulp-jsdoc-to-markdown");
 var rename = require("gulp-rename");
 var concat = require("gulp-concat");
-var pack = require('package-json-io');
 var inquirer = require("inquirer");
 var jeditor = require("gulp-json-editor");
 require('colors');
