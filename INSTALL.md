@@ -6,5 +6,5 @@ To build your own copy of masonry from source, and link it as a globally install
 npm install
 gulp dist
 cd dist
-npm link
+npm link --production
 ```
