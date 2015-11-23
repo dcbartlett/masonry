@@ -5,7 +5,7 @@ var cwd = process.cwd(),
 
 fs.existsSync(canonicalPath(cwd+'/components')) || fs.mkdirSync(canonicalPath(cwd+'/components'));
 
-fs.writeFile(canonicalPath(cwd+'/routes.js'), 'test' , { flags: 'wx', mode: 644 }, function (err) {
+fs.writeFile(canonicalPath(cwd+'/routes.js'), 'test' , { flags: 'wx', mode: 0644 }, function (err) {
 	if (err) throw err;
 	console.log("Created Routes File");
 });
