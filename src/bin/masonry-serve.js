@@ -29,6 +29,7 @@ if (!config.production) {
 	// Lets ask the user how they want to serve.
 	var portMessage = "We are using the default port because ";
 	portMessage += (isRootPort(config.port)) ? "you are not root, but you are using a port less than 1025." : "your config didn't supply one.";
+	console.log(isRootPort(config.port));
 	inquirer.prompt([{
 		type: "input",
 		message: portMessage.green + "\n  Do you want to change it?",
