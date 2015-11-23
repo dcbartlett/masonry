@@ -1,19 +1,21 @@
+require('colors');
 var cwd = process.cwd(),
 	fs = require('fs'),
 	os = require('os');
 
+var routes = require(canonicalPath(__dirname+'/../templates/routes.json'));
 
-fs.existsSync(canonicalPath(cwd+'/components')) || fs.mkdirSync(canonicalPath(cwd+'/components'));
+fs.existsSync(canonicalPath(cwd+'/components')) || fs.mkdir(canonicalPath(cwd+'/components'), function () {
+	console.log("Created Components Directory");
+});
 
-fs.writeFile(canonicalPath(cwd+'/routes.js'), 'test' , { flags: 'wx', mode: 0644 }, function (err) {
-	if (err) throw err;
+fs.existsSync(canonicalPath(cwd+'/routes.json')) || fs.writeFile(canonicalPath(cwd+'/routes.json'), JSON.stringify(routes.content, null, 4), { mode: 0644 }, function () {
 	console.log("Created Routes File");
 });
 
-
 function canonicalPath(path) {
 	if (os.platform().indexOf('win') > -1) {
-		path.replace('/', '\\', 'g');
+		path = path.replace(/\//g, "\\");
 	}
 	return path;
 }
