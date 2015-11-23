@@ -29,12 +29,15 @@ gulp.task("docs", ['clean:docs'], function() {
 });
 
 gulp.task("dist", ['clean:dist'], function() {
-	gulp.src(["src/bin/*"])
+	gulp.src(["src/bin/**"])
 		.on("error", errHandler)
 		.pipe(gulp.dest("dist/bin"));
-	gulp.src(["src/lib/*"])
+	gulp.src(["src/lib/**"])
 		.on("error", errHandler)
 		.pipe(gulp.dest("dist/lib"));
+	gulp.src(["src/templates/**"])
+		.on("error", errHandler)
+		.pipe(gulp.dest("dist/templates"));
 
 	gulp.src("./package.json")
 		.pipe(jeditor(function(json) {
