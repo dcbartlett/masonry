@@ -14,35 +14,48 @@ fs.existsSync(canonicalPath(cwd+'/routes.json')) || errors.push({code: 404, mess
 fs.existsSync(canonicalPath(cwd+'/config.json')) || fs.existsSync(canonicalPath(cwd+'/config.dev.json')) || errors.push({code: 404, message: 'Missing Config File'});
 validate(errors);
 
+
+// Validate the config we have.
 !fs.existsSync(canonicalPath(cwd+'/config.dev.json')) || warnings.push({code: 200, message: 'Dev Config exists. Is this a production environment?'});
-fs.existsSync(canonicalPath(cwd+'/config.dev.json')) ?
-  require(canonicalPath(cwd+'/config.dev.json')).port || warnings.push({code: 600, message: 'No port specified in config.dev.json.  Using port 8080 by default.'}) && (noPort = true) :
-  require(canonicalPath(cwd+'/config.json')).port || warnings.push({code: 600, message: 'No port specified in config.json.  Using port 8080 by default.'}) && (noPort = true) ;
+
+var config = require(canonicalPath(cwd+'/config.json')) || require(canonicalPath(cwd+'/config.dev.json'));
+console.log(config);
 validate(warnings);
 
-// Validation completed.  Lets ask the user how they want to serve.
 
-inquirer.prompt([{
-	type: "input",
-	message: "We are using the default port because your config didn't supply one.".green+"\n  Do you want to change it?",
-	default: 8080,
-	name: "port",
-	when: noPort,
-	validate: function(entry) {
-		validated = (!isNaN(parseInt(entry)) && 0 < parseInt(entry) && parseInt(entry) < 65535) ? true : "Please provide a Number between 0 and 65535";
-		if (validated && typeof validated !== 'string' && !(os.platform().indexOf('win') > -1)) {
-			validated = (parseInt(entry) > 1024 || process.env.USER == "root") ? true : "Ports under 1025 can only be run as root";
+
+// Validation completed.
+if (!config.production) {
+	// Lets ask the user how they want to serve.
+	var portMessage = "We are using the default port because ";
+	portMessage += (isRootPort(config.port)) ? "you are not root, but you are using a port less than 1025." : "your config didn't supply one.";
+	inquirer.prompt([{
+		type: "input",
+		message: portMessage.green + "\n  Do you want to change it?",
+		default: 8080,
+		name: "port",
+		when: !config.port || isRootPort(config.port),
+		validate: function(entry) {
+			validated = (!isNaN(parseInt(entry)) && 0 < parseInt(entry) && parseInt(entry) < 65535) ? true : "Please provide a Number between 0 and 65535";
+			if (validated && typeof validated !== 'string') {
+				validated = !isRootPort() ? true : "Ports under 1025 can only be run as root";
+			}
+			return validated;
 		}
-		return validated;
-	}
-},{
-	type: "confirm",
-	message: "Do you want to watch for component changes",
-	name: "watch"	
-}], function(answers) {
-	console.log("You wanted:");
-	console.log(JSON.stringify(answers, null, 4));
-});
+	},{
+		type: "confirm",
+		message: "Do you want to watch for component changes",
+		name: "watch"	
+	}], function(answers) {
+		// Update running config with our answers.
+		console.log("You wanted:");
+		console.log(JSON.stringify(answers, null, 4));
+		// serve(config);
+	});
+} else {
+	// serve(config);
+}
+
 
 function canonicalPath(path) {
 	if (os.platform().indexOf('win') > -1) {
@@ -68,3 +81,7 @@ function validate(array) {
 	}
 
 };
+
+function isRootPort(port) {
+	return !(os.platform().indexOf('win') > -1) && parseInt(port) < 1025 && process.env.USER !== "root"
+}
