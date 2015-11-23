@@ -84,5 +84,8 @@ function validate(array) {
 };
 
 function isRootPort(port) {
+	console.log(!(os.platform().indexOf('win') > -1));
+	console.log(parseInt(port) < 1025);
+	console.log(process.env.USER !== "root");
 	return !(os.platform().indexOf('win') > -1) && parseInt(port) < 1025 && process.env.USER !== "root"
 }
