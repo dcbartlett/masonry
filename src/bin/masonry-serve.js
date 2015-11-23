@@ -2,26 +2,39 @@ require('colors');
 var cwd = process.cwd(),
 	fs = require('fs'),
 	os = require('os'),
-	inquirer = require("inquirer");
+	inquirer = require("inquirer"),
+	merge = require('deepmerge'),
+	program = require('commander'),
+	package = require('../package.json');
 
 var errors = [],
 	warnings = [];
 	noPort = false;
 
+program
+  .version(package.version)  
+  .option('-p, --port <n>', (isRootUser()) ? "A number between 0 and 65535" : "A number between 1025 and 65535", parseInt)
+  .option('-f, --float <n>', 'A float argument', parseFloat)
+  .parse(process.argv);
+
+console.log(program)
+
 // Validate that we have a masonry project here.
-fs.existsSync(canonicalPath(cwd+'/components'))  || errors.push({code: 404, message: 'Missing Components Folder'});
-fs.existsSync(canonicalPath(cwd+'/routes.json')) || errors.push({code: 404, message: 'Missing Routes File'});
-fs.existsSync(canonicalPath(cwd+'/config.json')) || fs.existsSync(canonicalPath(cwd+'/config.dev.json')) || errors.push({code: 404, message: 'Missing Config File'});
+fs.existsSync(canonicalPath(cwd+'/components'))  || errors.push({code: 404, message: "Missing Components Folder"});
+fs.existsSync(canonicalPath(cwd+'/routes.json')) || errors.push({code: 404, message: "Missing Routes File"});
+fs.existsSync(canonicalPath(cwd+'/config.json')) || fs.existsSync(canonicalPath(cwd+'/config.dev.json')) || errors.push({code: 404, message: "Missing Config File"});
 validate(errors);
 
 
 // Validate the config we have.
-!fs.existsSync(canonicalPath(cwd+'/config.dev.json')) || warnings.push({code: 200, message: 'Dev Config exists. Is this a production environment?'});
+!fs.existsSync(canonicalPath(cwd+'/config.dev.json')) || warnings.push({code: 200, message: "Dev Config exists. Is this a production environment?"});
 
 var config = (fs.existsSync(canonicalPath(cwd+'/config.json'))) ? require(canonicalPath(cwd+'/config.json')) : require(canonicalPath(cwd+'/config.dev.json')) ;
-console.log(config);
-validate(warnings);
 
+console.log(config);
+
+if (!config.port) { warnings.push({code: 200, message: "Your config doesn\'t have a port."}) }
+validate(warnings);
 
 
 // Validation completed.
@@ -84,5 +97,9 @@ function validate(array) {
 };
 
 function isRootPort(port) {
-	return !(os.platform().indexOf('win') > -1) && parseInt(port) < 1025 && process.env.USER !== "root"
+	return !isRootUser() && parseInt(port) < 1025
+}
+
+function isRootUser() {
+	return (os.platform().indexOf('win') > -1) || process.env.USER == "root"
 }

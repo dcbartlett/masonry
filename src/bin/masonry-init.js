@@ -1,7 +1,9 @@
 require('colors');
 var cwd = process.cwd(),
 	fs = require('fs'),
-	os = require('os');
+	os = require('os'),
+	program = require('commander'),
+	package = require('../package.json');
 
 var routes = require(canonicalPath(__dirname+'/../templates/routes.json'));
 
