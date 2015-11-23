@@ -21,7 +21,6 @@ fs.existsSync(canonicalPath(cwd+'/config.dev.json')) ?
 validate(warnings);
 
 // Validation completed.  Lets ask the user how they want to serve.
-console.log(process)
 
 inquirer.prompt([{
 	type: "input",
