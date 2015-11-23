@@ -88,6 +88,12 @@ gulp.task("version", function(done) {
 	});
 });
 
+gulp.task("watch", ["watch:dist"]);
+
+gulp.task("watch:dist", function() {
+	gulp.watch('src/**/*', ['dist']);
+});
+
 gulp.task("default", function() {
 	console.log("No Help for you");
 });
