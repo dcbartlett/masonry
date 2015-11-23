@@ -18,7 +18,7 @@ validate(errors);
 // Validate the config we have.
 !fs.existsSync(canonicalPath(cwd+'/config.dev.json')) || warnings.push({code: 200, message: 'Dev Config exists. Is this a production environment?'});
 
-var config = require(canonicalPath(cwd+'/config.json')) || require(canonicalPath(cwd+'/config.dev.json'));
+var config = (fs.existsSync(canonicalPath(cwd+'/config.json'))) ? require(canonicalPath(cwd+'/config.json')) : require(canonicalPath(cwd+'/config.dev.json')) ;
 console.log(config);
 validate(warnings);
 
