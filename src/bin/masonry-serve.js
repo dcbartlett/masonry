@@ -39,7 +39,7 @@ if (!config.production) {
 		validate: function(entry) {
 			validated = (!isNaN(parseInt(entry)) && 0 < parseInt(entry) && parseInt(entry) < 65535) ? true : "Please provide a Number between 0 and 65535";
 			if (validated && typeof validated !== 'string') {
-				validated = !isRootPort() ? true : "Ports under 1025 can only be run as root";
+				validated = !isRootPort(entry) ? true : "Ports under 1025 can only be run as root";
 			}
 			return validated;
 		}
