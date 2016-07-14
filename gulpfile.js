@@ -5,29 +5,43 @@ var gutil = require("gulp-util");
 var gulpJsdoc2md = require("gulp-jsdoc-to-markdown");
 var rename = require("gulp-rename");
 var concat = require("gulp-concat");
+var del = require('del');
 var inquirer = require("inquirer");
 var jeditor = require("gulp-json-editor");
 require('colors');
- 
-gulp.task("docs", function() {
-	return gulp.src("lib/*.js")
+
+gulp.task("clean:docs", function() {
+	return del(["docs"]);
+});
+
+gulp.task("clean:dist", function() {
+	return del(["dist"]);
+});
+
+gulp.task("docs", ['clean:docs'], function() {
+	// var opts = { template: fs.readFileSync("./docs/template.hbs", "utf8") }; 
+
+	return gulp.src("src/lib/*.js")
 		.pipe(concat("all.md"))
-		.pipe(gulpJsdoc2md({ template: fs.readFileSync("./docs/template.hbs", "utf8") }))
+		.pipe(gulpJsdoc2md())
 		.on("error", errHandler)
 		.pipe(gulp.dest("docs"));
 });
 
-gulp.task("dist", function() {
-	gulp.src(["src/bin/*"])
+gulp.task("dist", ['clean:dist'], function() {
+	gulp.src(["src/bin/**"])
 		.on("error", errHandler)
 		.pipe(gulp.dest("dist/bin"));
-	gulp.src(["src/lib/*"])
+	gulp.src(["src/lib/**"])
 		.on("error", errHandler)
 		.pipe(gulp.dest("dist/lib"));
+	gulp.src(["src/templates/**"])
+		.on("error", errHandler)
+		.pipe(gulp.dest("dist/templates"));
 
 	gulp.src("./package.json")
 		.pipe(jeditor(function(json) {
-			json.bin.masonry = 'bin/index.js';
+			json.bin.masonry = 'bin/masonry.js';
 			return json;
 		}))
 		.on("error", errHandler)
@@ -75,6 +89,12 @@ gulp.task("version", function(done) {
 			.on("error", errHandler)
 			.pipe(gulp.dest("."));
 	});
+});
+
+gulp.task("watch", ["watch:dist"]);
+
+gulp.task("watch:dist", function() {
+	gulp.watch('src/**/*', ['dist']);
 });
 
 gulp.task("default", function() {

@@ -1,0 +1,11 @@
+{
+	"type": "json",
+	"content": {
+		"login": "login",
+		"menu": "menu",
+		"dashboard": {
+			"balance": "balance",
+			"history": "history"
+		}
+	}
+}
