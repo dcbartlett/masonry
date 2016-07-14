@@ -1,0 +1,31 @@
+Bin
+
+-1  Create CLI interface
+  -1  Version
+  -1  Help
+    -1  AutoHelp
+    -1  Detailed
+  -1  Generators
+  -1  Packers
+  -1  CI Control
+  -1  Deployer
+
+
+Lib
+
+-3  Component Packager
+-3  Redux Container
+-2  View Handler
+-2  Transport System
+-1  Testing Harness
+  -4  Mocha Test Runner
+  -2  Istanbul Code Coverage
+
+
+
+Side-Task
+
+-3  Create service for deployment
+  -2  Create Load Balaner Image
+  -1  Create AWS "Masons" Image (Control/Worker Nodes)
+  -1  Create AWS "Apprentice" Image (Wroker Nodes)
